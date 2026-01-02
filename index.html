@@ -60,12 +60,12 @@
     <canvas id="snow-canvas"></canvas>
 </div>
 
-<header class="w-full border-b border-gray-200 dark:border-gray-800 py-6 sticky top-0 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm z-50">
-    <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
-        <a class="text-xl font-bold tracking-tight hover:text-primary transition-colors" href="index.html">
+<header id="site-header" class="w-full border-b border-gray-200 dark:border-gray-800 py-4 sm:py-6 sticky top-0 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm z-50">
+    <div class="max-w-4xl mx-auto px-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+        <a class="text-xl font-bold tracking-tight hover:text-primary transition-colors shrink-0" href="index.html">
             Shango's Neural Net
         </a>
-        <nav class="flex items-center gap-6 text-sm font-medium">
+        <nav class="flex w-full sm:w-auto flex-wrap items-center justify-start sm:justify-end gap-4 sm:gap-6 text-xs sm:text-sm font-medium">
             <a class="squiggly" href="index.html">Posts</a>
             <a class="hover:text-primary transition-colors" href="about.html">About</a>
             <a class="hover:text-primary transition-colors" href="https://www.shangobashi.com" target="_blank">Portfolio</a>
@@ -80,7 +80,7 @@
     </div>
 </header>
 
-<div id="reading-progress" class="fixed left-0 w-full h-[3px] bg-gray-200 dark:bg-gray-800 z-[60] hidden" style="top: 73px;">
+<div id="reading-progress" class="fixed left-0 w-full h-[3px] bg-gray-200 dark:bg-gray-800 z-[60] hidden">
     <div id="progress-bar" class="h-full bg-primary transition-all duration-150" style="width: 0%;"></div>
 </div>
 
@@ -312,13 +312,25 @@
         updateReadingProgress();
     }
 
+    const headerElement = document.getElementById('site-header');
+    const readingProgress = document.getElementById('reading-progress');
+
+    function updateProgressOffset() {
+        if (!headerElement || !readingProgress) { return; }
+        readingProgress.style.top = `${headerElement.offsetHeight}px`;
+    }
+
     function router() {
         const hash = window.location.hash.substring(1);
         if (hash) { renderPost(hash); } else { renderHome(); }
     }
 
     window.addEventListener('hashchange', router);
-    window.addEventListener('load', router);
+    window.addEventListener('load', () => {
+        updateProgressOffset();
+        router();
+    });
+    window.addEventListener('resize', updateProgressOffset);
     document.getElementById('year').textContent = new Date().getFullYear();
 
     // Theme Toggle Logic
