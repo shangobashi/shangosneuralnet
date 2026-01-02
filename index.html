@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Shango's Neural Net</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FF6B00",
+                        "background-light": "#FAFAFA",
+                        "background-dark": "#0a0a0a",
+                        "surface-light": "#FFFFFF",
+                        "surface-dark": "#171717",
+                        "text-light": "#1F2937",
+                        "text-dark": "#EDEDED",
+                        "muted-light": "#6B7280",
+                        "muted-dark": "#A3A3A3",
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+                    typography: (theme) => ({
+                        DEFAULT: { css: { color: theme('colors.text-light'), a: { color: theme('colors.primary') } } },
+                        invert: {
+                            css: {
+                                color: '#F8FAFC',
+                                a: { color: theme('colors.primary') },
+                                h2: { color: '#F8FAFC' },
+                                h3: { color: '#F8FAFC' },
+                                strong: { color: '#F8FAFC' },
+                                p: { color: '#F8FAFC' },
+                                li: { color: '#F8FAFC' }
+                            }
+                        }
+                    }),
+                },
+            },
+        };
+    </script>
+    <style>
+        body { font-feature-settings: "cv02", "cv03", "cv04", "cv11" }
+        .squiggly { text-decoration: none; border-bottom: 2px solid transparent; background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuD-_YUjI2O10y96xPu4F4wR6krPY5Z3d6rOV6ivAyNAw-vG9XB1-CAMbo61bUbyfgTfNqOpleCCx1bXyoltbT5blI39XZBFKeR-yAkWge4vmsrLuqFncBKDUn9e_7qjx3JIa73GSvwV6H-yiYPd4AOWUkkx-creuOdEjpzKN9V_In6pE2INIFcEP1e-lPJNRjLB1X0OoyXNpBwOFAWqgEiTyXZRTxu3VsFfrSHJbtVdt0_K4eGy_g-b5chve2i2ztZmsSdSBcBLtAw); background-repeat: repeat-x; background-size: 20px 4px; background-position: 0 100%; padding-bottom: 3px }
+        .light .squiggly { background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuBxdsSCrhgUdkoCOn1epo2Ul7Q02si-fvPGA2cYstkBcFMTcrVntCXCk3OJsRm0wjczOwK2GhMftStH85WHJwPDfwuTlhoKINGXVftLWkFZt-ofOtCAW23Saclm2pBwJ5uEZ1GAhcnKHT1QHb97wyLB8Ld3gj_4M_KU4XodlO3YULRELW3prfyHZRxFT_oZtydl4yliZzUc0A5F84Rv7YkzD02BTw55kqSeU-1SJJD8Jig1lUcR4lq9p3NJwmkUt4Zp_aATAFRi5SU) }
+        html.dark body { background-color: #0a0a0a }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark font-mono antialiased transition-colors duration-300 min-h-screen flex flex-col">
+
+<header class="w-full border-b border-gray-200 dark:border-gray-800 py-6 sticky top-0 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm z-50">
+    <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+        <a class="text-xl font-bold tracking-tight hover:text-primary transition-colors" href="index.html">
+            Shango's Neural Net
+        </a>
+        <nav class="flex items-center gap-6 text-sm font-medium">
+            <a class="squiggly" href="index.html">Posts</a>
+            <a class="hover:text-primary transition-colors" href="about.html">About</a>
+            <a class="hover:text-primary transition-colors" href="https://www.shangobashi.com" target="_blank">Portfolio</a>
+            <button aria-label="Toggle Theme" class="hover:text-primary transition-colors" id="theme-toggle">
+                <span class="material-symbols-outlined text-[20px] dark:hidden">light_mode</span>
+                <span class="material-symbols-outlined text-[20px] hidden dark:inline">dark_mode</span>
+            </button>
+        </nav>
+    </div>
+</header>
+
+<div id="reading-progress" class="fixed left-0 w-full h-[3px] bg-gray-200 dark:bg-gray-800 z-[60] hidden" style="top: 73px;">
+    <div id="progress-bar" class="h-full bg-primary transition-all duration-150" style="width: 0%;"></div>
+</div>
+
+<main id="content" class="flex-grow w-full max-w-4xl mx-auto px-6 py-12">
+    <!-- Articles will appear here -->
+</main>
+
+<footer class="py-8 text-center text-xs text-muted-light dark:text-muted-dark font-mono border-t border-gray-200 dark:border-gray-800">
+    <p>© <span id="year"></span> Shango's Neural Net.</p>
+</footer>
+
+<script>
+    /**
+     * TO POST A NEW ARTICLE:
+     * Add a new object to the array below.
+     * Use HTML for the 'content' field.
+     */
+    const posts = [
+        {
+            id: 'keeping-sight-of-the-goal',
+            title: 'Keeping Sight of the Goal in a Complete Sandstorm',
+            date: '02 Jan, 2026',
+            readTime: '7 min read',
+            content: `
+                <h2>Keeping Sight of the Goal in a Complete Sandstorm</h2>
+
+                <p>I don't really know how to write this without it sounding dramatic, so I'll just say it plainly.</p>
+
+                <p>In 2019, I broke my back.<br>
+                The years that followed were not "a setback." They were a different life. Rehab from 2019 to 2024. A long stretch where time moves weird and progress is microscopic, and you're forced to learn patience the hard way.</p>
+
+                <p>Then I got my life back.</p>
+
+                <p>And once I did, I made a decision that probably looks insane from the outside: I was going to rebuild everything, fast, on purpose, with intention. Not with vibes. With systems.</p>
+
+                <h3>The rebuild started like an engineering problem</h3>
+
+                <p>I didn't want to "learn to code." I didn't want to be someone who collects tutorials and talks about frameworks. I wanted to become the kind of builder teams can trust with real work: systems that ship, systems that stay up, systems that don't crumble the second reality shows up.</p>
+
+                <p>So I set a target and I treated it like a project plan.</p>
+
+                <p>The target is simple to say and hard to execute:</p>
+
+                <p><strong>Full-stack delivery + data engineering reliability + ML readiness + systems thinking.</strong><br>
+                Robotics in 2026.</p>
+
+                <p>That's not a slogan. That's the throughline. Everything I pick is in service of that.</p>
+
+                <h3>The last seven months were a controlled burn</h3>
+
+                <p>People ask me how I did it and I never know what to answer because the truth sounds like a lie.</p>
+
+                <p>I went into an immersion cycle. A controlled burn.<br>
+                <strong>150-hour weeks.</strong><br>
+                Study, build, repeat. All signal, minimal noise.</p>
+
+                <p>Not because I'm trying to impress anyone with a number. I'm saying it because it explains why the timeline looks so compressed. It explains why the output comes in waves. It's not magic. It's volume and structure.</p>
+
+                <h3>I just earned the Data Engineer Professional Certification</h3>
+
+                <p>One of the big milestones I hit recently is the <strong>Codecademy Data Engineer Professional Certification</strong>.</p>
+
+                <p>And I'm going to say something that might offend people who treat "data" like a boring side quest:</p>
+
+                <p>Data engineering is the spine.</p>
+
+                <p>It's the difference between "we have an AI feature" and "this thing actually works." It's the difference between a model demo and a product. It's pipelines, SQL depth, transformations, modeling instincts, and correctness under change.</p>
+
+                <p>Most people skip it because it's not sexy.<br>
+                I leaned into it because I'm serious.</p>
+
+                <h3>I also completed the Computer Science Professional Certification</h3>
+
+                <p>I also completed the <strong>Computer Science Professional Certification</strong> because I wanted the anchor. The rigor. The fundamentals that keep you honest when the product becomes chaotic and the system scales.</p>
+
+                <p>I have zero interest in being a fragile builder who can only operate inside the comfort zone of a tutorial. Fundamentals are the antidote.</p>
+
+                <h3>My online presence looks messy because I'm not optimizing for "clean"</h3>
+
+                <p>If you've followed me on Twitter, you know my feed can look… unpredictable.</p>
+
+                <p>Crypto airdrops. Tool trials. Weird flipped-text bios. Little personal voids. "Chunky hedge" hints. Random posts that feel like I'm talking to myself.</p>
+
+                <p>From the outside it can look chaotic.</p>
+
+                <p>But it's not random. It's consistent in a way that's hard to see unless you understand how I work.</p>
+
+                <p>I'm always probing systems. I'm always running experiments. I'm always trying to extract rules from noise. Sometimes that means code. Sometimes that means markets. Sometimes that means human behavior. Sometimes it means art.</p>
+
+                <p>Same habit. Different surface.</p>
+
+                <h3>I'm skeptical of hype, including AI hype</h3>
+
+                <p>I don't care who says what. I don't care if it's a billionaire or a doom prophet or an optimist selling salvation.</p>
+
+                <p>I'm not building a worldview.<br>
+                I'm building a skill stack that survives constraints.</p>
+
+                <p>I'm interested in what survives contact with reality.</p>
+
+                <h3>My "non-tech" background is not a detour, it's training</h3>
+
+                <p>Before I got locked into this trajectory, I lived other lives.</p>
+
+                <p>Sound engineering taught me precision. Reliability. Signal and noise. The humility of systems that break if you're sloppy.</p>
+
+                <p>Music taught me end-to-end thinking. It's not just "make the beat." It's the pipeline: tools, iteration, feedback loops, mixing, mastering, artwork, marketing, release. You ship or you disappear.</p>
+
+                <p>And yes, I had a law school detour. That taught me what doesn't fit. Music taught me what won't let go. Engineering became the bridge that can carry both.</p>
+
+                <p>If you want a single sentence that explains how my brain works, it's this:</p>
+
+                <p>I'm always trying to build a complete pipeline from idea to execution.</p>
+
+                <h3>Blue Swarm: building with a team of 60+ agents</h3>
+
+                <p>One thing I'm actively building right now is <strong>Blue Swarm</strong>: a cohesive team of 60+ agents working together across planning, coding, review, testing, and documentation.</p>
+
+                <p>Not for hype. Not for vibes.<br>
+                For throughput and quality.</p>
+
+                <p>It's basically me asking: what happens when you treat "execution" itself like a system you can design?</p>
+
+                <p>That's what I care about. Not aesthetics. Not slogans. Output.</p>
+
+                <h3>Sparks: the operating system</h3>
+
+                <p>I wrote this before and I still mean it:</p>
+
+                <p><strong>Keeping sight of your goal in a complete sandstorm. Biggest skill I earned this year. How? Sparks.</strong></p>
+
+                <p>Sparks are those tiny moments that keep you moving when everything is noisy, unclear, and heavy. Not motivation. Not inspiration. Sparks.</p>
+
+                <p>You collect them. You protect them. You use them to keep the trajectory.</p>
+
+                <h3>Where this is going</h3>
+
+                <p>Here's where I'm at now:</p>
+
+                <ul>
+                    <li>Full-stack delivery is real.</li>
+                    <li>Data engineering is now certified.</li>
+                    <li>Computer science foundations are anchored.</li>
+                    <li>The ML / data science cluster is being closed deliberately.</li>
+                    <li>Systems thinking is becoming the thread that ties it all together.</li>
+                    <li>Robotics is still the 2026 horizon.</li>
+                </ul>
+
+                <p>I'm building in public until the output speaks louder than any bio.</p>
+
+                <p>If you're a startup and you need someone who can ship and still care about correctness, reliability, and systems design, you already know what to do.</p>
+
+                <p>And if you're just watching: keep watching. The next artifacts will make the story obvious.</p>
+            `
+        }
+    ];
+
+    const contentDiv = document.getElementById('content');
+
+    // Reading Progress Bar
+    function updateReadingProgress() {
+        const windowHeight = window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight;
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollableHeight = documentHeight - windowHeight;
+        const progress = (scrollTop / scrollableHeight) * 100;
+
+        document.getElementById('progress-bar').style.width = Math.min(progress, 100) + '%';
+    }
+
+    function renderHome() {
+        document.getElementById('reading-progress').classList.add('hidden');
+
+        if (posts.length === 0) {
+            contentDiv.innerHTML = `
+                <div class="py-20 text-center">
+                    <h2 class="text-2xl font-bold opacity-50">Neural connections forming...</h2>
+                    <p class="text-muted-light dark:text-muted-dark mt-2">Check back soon for the first transmission.</p>
+                </div>`;
+            return;
+        }
+
+        let html = '<h1 class="text-3xl font-bold mb-12">Latest Transmissions</h1><div class="space-y-16">';
+        posts.forEach(post => {
+            html += `
+                <article>
+                    <div class="text-sm text-muted-light dark:text-muted-dark mb-2">${post.date}</div>
+                    <a href="#${post.id}" class="text-2xl font-bold text-primary hover:underline underline-offset-4">${post.title}</a>
+                </article>
+            `;
+        });
+        html += '</div>';
+        contentDiv.innerHTML = html;
+        window.scrollTo(0,0);
+    }
+
+    function renderPost(id) {
+        const post = posts.find(p => p.id === id);
+        if (!post) { renderHome(); return; }
+
+        document.getElementById('reading-progress').classList.remove('hidden');
+
+        contentDiv.innerHTML = `
+            <article class="prose dark:prose-invert prose-lg max-w-none font-mono">
+                <header class="mb-12">
+                    <h1 class="text-3xl md:text-4xl text-primary font-bold mb-4">${post.title}</h1>
+                    <div class="flex items-center text-sm text-muted-light dark:text-muted-dark gap-y-2">
+                        <div class="flex items-center mr-6">
+                            <span class="material-symbols-outlined text-[16px] mr-2">calendar_today</span>
+                            ${post.date}
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-1 h-1 rounded-full bg-muted-light dark:bg-muted-dark mx-3"></span>
+                            ${post.readTime}
+                        </div>
+                    </div>
+                </header>
+                <div class="space-y-8 leading-relaxed text-[15px] md:text-[16px]">
+                    ${post.content}
+                </div>
+                <footer class="mt-16 pt-8 border-t border-gray-200 dark:border-gray-700">
+                    <a class="text-primary hover:underline flex items-center" href="#">
+                        <span class="material-symbols-outlined text-[16px] mr-2">arrow_back</span> Back to Feed
+                    </a>
+                </footer>
+            </article>
+        `;
+        window.scrollTo(0,0);
+        updateReadingProgress();
+    }
+
+    function router() {
+        const hash = window.location.hash.substring(1);
+        if (hash) { renderPost(hash); } else { renderHome(); }
+    }
+
+    window.addEventListener('hashchange', router);
+    window.addEventListener('load', router);
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Theme Toggle Logic
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const htmlElement = document.documentElement;
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        htmlElement.classList.add('dark');
+    }
+    themeToggleBtn.addEventListener('click', () => {
+        if (htmlElement.classList.contains('dark')) {
+            htmlElement.classList.remove('dark');
+            localStorage.theme = 'light';
+        } else {
+            htmlElement.classList.add('dark');
+            localStorage.theme = 'dark';
+        }
+    });
+
+    // Scroll event for progress bar
+    window.addEventListener('scroll', updateReadingProgress);
+</script>
+</body>
+</html>
