@@ -47,10 +47,18 @@
         .squiggly { text-decoration: none; border-bottom: 2px solid transparent; background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuD-_YUjI2O10y96xPu4F4wR6krPY5Z3d6rOV6ivAyNAw-vG9XB1-CAMbo61bUbyfgTfNqOpleCCx1bXyoltbT5blI39XZBFKeR-yAkWge4vmsrLuqFncBKDUn9e_7qjx3JIa73GSvwV6H-yiYPd4AOWUkkx-creuOdEjpzKN9V_In6pE2INIFcEP1e-lPJNRjLB1X0OoyXNpBwOFAWqgEiTyXZRTxu3VsFfrSHJbtVdt0_K4eGy_g-b5chve2i2ztZmsSdSBcBLtAw); background-repeat: repeat-x; background-size: 20px 4px; background-position: 0 100%; padding-bottom: 3px }
         .light .squiggly { background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuBxdsSCrhgUdkoCOn1epo2Ul7Q02si-fvPGA2cYstkBcFMTcrVntCXCk3OJsRm0wjczOwK2GhMftStH85WHJwPDfwuTlhoKINGXVftLWkFZt-ofOtCAW23Saclm2pBwJ5uEZ1GAhcnKHT1QHb97wyLB8Ld3gj_4M_KU4XodlO3YULRELW3prfyHZRxFT_oZtydl4yliZzUc0A5F84Rv7YkzD02BTw55kqSeU-1SJJD8Jig1lUcR4lq9p3NJwmkUt4Zp_aATAFRi5SU) }
         html.dark body { background-color: #0a0a0a }
+        .snow-layer { position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0; transition: opacity 300ms ease }
+        .snow-layer.active { opacity: 1 }
+        #snow-canvas { width: 100%; height: 100% }
+        #snow-toggle[data-active="true"] { color: #7dd3fc }
     </style>
 </head>
 
-<body class="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark font-mono antialiased transition-colors duration-300 min-h-screen flex flex-col">
+<body class="relative bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark font-mono antialiased transition-colors duration-300 min-h-screen flex flex-col">
+
+<div id="snow-layer" class="snow-layer" aria-hidden="true">
+    <canvas id="snow-canvas"></canvas>
+</div>
 
 <header class="w-full border-b border-gray-200 dark:border-gray-800 py-6 sticky top-0 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm z-50">
     <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
@@ -61,6 +69,9 @@
             <a class="hover:text-primary transition-colors" href="index.html">Posts</a>
             <a class="squiggly" href="about.html">About</a>
             <a class="hover:text-primary transition-colors" href="https://www.shangobashi.com" target="_blank">Portfolio</a>
+            <button aria-label="Toggle Snow" aria-pressed="false" class="hover:text-primary transition-colors" data-active="false" id="snow-toggle">
+                <span class="material-symbols-outlined text-[20px]">ac_unit</span>
+            </button>
             <button aria-label="Toggle Theme" class="hover:text-primary transition-colors" id="theme-toggle">
                 <span class="material-symbols-outlined text-[20px] dark:hidden">light_mode</span>
                 <span class="material-symbols-outlined text-[20px] hidden dark:inline">dark_mode</span>
@@ -69,7 +80,7 @@
     </div>
 </header>
 
-<main class="flex-grow w-full max-w-4xl mx-auto px-6 py-12">
+<main class="relative z-10 flex-grow w-full max-w-4xl mx-auto px-6 py-12">
     <section class="mb-16">
         <h1 class="text-3xl font-bold mb-8 text-primary">About</h1>
         <div class="flex flex-col md:flex-row gap-8 items-start mb-8">
@@ -91,24 +102,12 @@
 
     <section class="mb-16">
         <h2 class="text-2xl font-bold mb-6">GitHub Activity</h2>
-        <div class="w-full overflow-x-auto mb-6 bg-surface-light dark:bg-surface-dark p-6 rounded-lg border border-gray-200 dark:border-gray-800">
-            <div class="min-w-[600px] flex flex-col gap-1">
-                <div class="flex text-[10px] text-muted-light dark:text-muted-dark mb-1 ml-8 justify-between px-2">
-                    <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
-                    <span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
-                </div>
-                <div class="flex gap-1">
-                    <div class="flex flex-col gap-[3px] text-[10px] text-muted-light dark:text-muted-dark w-6 pt-2">
-                        <span>Mon</span>
-                        <span class="mt-3">Wed</span>
-                        <span class="mt-3">Fri</span>
-                    </div>
-                    <div class="flex gap-[3px]">
-                        <div class="grid grid-rows-7 grid-flow-col gap-[3px]" id="github-activity">
-                            <!-- GitHub contribution squares will be populated here -->
-                        </div>
-                    </div>
-                </div>
+        <div class="w-full mb-6">
+            <div class="bg-surface-light dark:bg-surface-dark p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+                <img src="https://ghchart.rshah.org/FF6B00/shangobashi"
+                     alt="Shango's GitHub Contribution Chart"
+                     class="w-full"
+                     style="image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;" />
             </div>
         </div>
         <div class="space-y-4 text-base leading-relaxed">
@@ -162,7 +161,7 @@
     </section>
 </main>
 
-<footer class="py-8 text-center text-xs text-muted-light dark:text-muted-dark font-mono border-t border-gray-200 dark:border-gray-800">
+<footer class="relative z-10 py-8 text-center text-xs text-muted-light dark:text-muted-dark font-mono border-t border-gray-200 dark:border-gray-800">
     <p>© <span id="year"></span> Shango Bashi.</p>
 </footer>
 
@@ -185,66 +184,146 @@
         }
     });
 
-    // GitHub Contribution Graph
-    async function loadGitHubContributions() {
-        const container = document.getElementById('github-activity');
+    // Snow Toggle Logic
+    const snowToggleBtn = document.getElementById('snow-toggle');
+    const snowLayer = document.getElementById('snow-layer');
+    const snowCanvas = document.getElementById('snow-canvas');
+    const snowCtx = snowCanvas.getContext('2d');
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        try {
-            // Fetch real contribution data from GitHub contributions API
-            const response = await fetch('https://github-contributions-api.jogruber.de/v4/shangobashi?y=last');
-            const data = await response.json();
+    let snowActive = false;
+    let snowRafId = null;
+    let snowLastTime = 0;
+    let snowFlakes = [];
+    let snowWidth = 0;
+    let snowHeight = 0;
+    let snowWind = 0;
 
-            if (!data.contributions) {
-                throw new Error('No contribution data received');
-            }
-
-            // Create a map of dates with contribution counts
-            const contributionMap = {};
-            data.contributions.forEach(day => {
-                contributionMap[day.date] = day.count;
-            });
-
-            // Get the last 365 days of contributions
-            const contributions = data.contributions.slice(-365);
-
-            contributions.forEach(day => {
-                const count = day.count;
-
-                // Determine color based on contribution count using your color scheme
-                let colorClass;
-                if (count === 0) {
-                    colorClass = 'bg-gray-200 dark:bg-gray-800';
-                } else if (count <= 3) {
-                    colorClass = 'bg-primary/40';
-                } else if (count <= 6) {
-                    colorClass = 'bg-primary/60';
-                } else {
-                    colorClass = 'bg-primary';
-                }
-
-                const square = document.createElement('div');
-                square.className = `w-[10px] h-[10px] rounded-[1px] ${colorClass}`;
-                square.title = `${day.date}: ${count} contribution${count !== 1 ? 's' : ''}`;
-                container.appendChild(square);
-            });
-        } catch (error) {
-            console.error('Failed to load GitHub contributions:', error);
-            // Fallback: generate placeholder pattern
-            for (let i = 0; i < 365; i++) {
-                const square = document.createElement('div');
-                square.className = 'w-[10px] h-[10px] rounded-[1px] bg-gray-200 dark:bg-gray-800';
-                container.appendChild(square);
-            }
-            // Show error message to user
-            const errorMsg = document.createElement('p');
-            errorMsg.className = 'text-xs text-muted-light dark:text-muted-dark mt-2';
-            errorMsg.textContent = 'Unable to load GitHub activity. Visit github.com/shangobashi for live data.';
-            container.parentElement.appendChild(errorMsg);
-        }
+    function randomBetween(min, max) {
+        return Math.random() * (max - min) + min;
     }
 
-    // Load GitHub contributions when page loads
-    loadGitHubContributions();
+    function createFlake() {
+        const depth = Math.random();
+        const radius = randomBetween(0.25, 1.0) + depth * 0.75;
+        const contrast = randomBetween(0.6, 1.1) * (0.5 + depth);
+        return {
+            x: Math.random() * snowWidth,
+            y: Math.random() * snowHeight,
+            radius,
+            speed: randomBetween(24, 68) * (0.35 + depth),
+            speedMult: randomBetween(0.6, 1.6),
+            drift: randomBetween(-36, 36) * (0.25 + depth),
+            windFactor: randomBetween(0.6, 1.4),
+            sway: randomBetween(0, Math.PI * 2),
+            swaySpeed: randomBetween(0.9, 2.4),
+            flutter: randomBetween(0.4, 1.4),
+            flutterSpeed: randomBetween(1.2, 3.4),
+            noisePhase: randomBetween(0, Math.PI * 2),
+            noiseSpeed: randomBetween(0.8, 2.2),
+            noiseAmp: randomBetween(0.4, 1.6),
+            opacity: randomBetween(0.18, 0.7) * contrast,
+            blur: depth > 0.65 ? randomBetween(1, 4.5) : randomBetween(0, 1.2)
+        };
+    }
+
+    function resizeSnowCanvas() {
+        snowWidth = window.innerWidth;
+        snowHeight = window.innerHeight;
+        const dpr = window.devicePixelRatio || 1;
+        snowCanvas.width = Math.floor(snowWidth * dpr);
+        snowCanvas.height = Math.floor(snowHeight * dpr);
+        snowCanvas.style.width = `${snowWidth}px`;
+        snowCanvas.style.height = `${snowHeight}px`;
+        snowCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        const densityScale = prefersReducedMotion ? 0.6 : 1;
+        const targetCount = Math.min(1400, Math.max(480, Math.round((snowWidth * snowHeight) / 1800 * densityScale)));
+        snowFlakes = Array.from({ length: targetCount }, createFlake);
+    }
+
+    function drawFlake(flake) {
+        snowCtx.beginPath();
+        snowCtx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+        snowCtx.fillStyle = `rgba(255, 255, 255, ${flake.opacity})`;
+        if (flake.blur > 0) {
+            snowCtx.shadowBlur = flake.blur;
+            snowCtx.shadowColor = 'rgba(255, 255, 255, 0.35)';
+        } else {
+            snowCtx.shadowBlur = 0;
+        }
+        snowCtx.fill();
+    }
+
+    function updateSnow(timestamp) {
+        if (!snowActive) { return; }
+        if (!snowLastTime) { snowLastTime = timestamp; }
+        const delta = Math.min(0.033, (timestamp - snowLastTime) / 1000);
+        snowLastTime = timestamp;
+
+        snowWind += (Math.random() - 0.5) * 0.045;
+        snowWind *= 0.972;
+
+        snowCtx.clearRect(0, 0, snowWidth, snowHeight);
+        snowFlakes.forEach((flake) => {
+            const speedFactor = prefersReducedMotion ? 0.55 : 1;
+            flake.sway += flake.swaySpeed * delta;
+            flake.flutter += flake.flutterSpeed * delta;
+            flake.noisePhase += flake.noiseSpeed * delta;
+
+            const flutterOffset = Math.sin(flake.flutter) * (flake.drift * 0.25);
+            const noiseOffset = Math.sin(flake.noisePhase) * flake.noiseAmp;
+
+            flake.y += flake.speed * flake.speedMult * delta * speedFactor + noiseOffset * 0.15;
+            flake.x += (Math.sin(flake.sway) * flake.drift + flutterOffset + noiseOffset + snowWind * 46 * flake.windFactor) * delta * speedFactor;
+
+            if (flake.y > snowHeight + 10) {
+                flake.y = -10;
+                flake.x = Math.random() * snowWidth;
+            }
+            if (flake.x > snowWidth + 10) { flake.x = -10; }
+            if (flake.x < -10) { flake.x = snowWidth + 10; }
+
+            drawFlake(flake);
+        });
+
+        snowRafId = requestAnimationFrame(updateSnow);
+    }
+
+    function startSnow() {
+        if (snowActive) { return; }
+        snowActive = true;
+        snowLayer.classList.add('active');
+        snowToggleBtn.setAttribute('aria-pressed', 'true');
+        snowToggleBtn.dataset.active = 'true';
+        resizeSnowCanvas();
+        snowLastTime = 0;
+        snowRafId = requestAnimationFrame(updateSnow);
+    }
+
+    function stopSnow() {
+        snowActive = false;
+        snowLayer.classList.remove('active');
+        snowToggleBtn.setAttribute('aria-pressed', 'false');
+        snowToggleBtn.dataset.active = 'false';
+        if (snowRafId) {
+            cancelAnimationFrame(snowRafId);
+            snowRafId = null;
+        }
+        snowCtx.clearRect(0, 0, snowWidth, snowHeight);
+    }
+
+    snowToggleBtn.addEventListener('click', () => {
+        if (snowActive) { stopSnow(); } else { startSnow(); }
+    });
+
+    let snowResizeTimeout;
+    window.addEventListener('resize', () => {
+        if (!snowActive) { return; }
+        clearTimeout(snowResizeTimeout);
+        snowResizeTimeout = setTimeout(resizeSnowCanvas, 150);
+    });
+
 </script>
 </body>
 </html>
