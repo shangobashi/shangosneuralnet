@@ -806,12 +806,15 @@
     }
 
     function drawFlake(flake) {
+        const isDark = document.documentElement.classList.contains('dark');
         snowCtx.beginPath();
         snowCtx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
-        snowCtx.fillStyle = `rgba(255, 255, 255, ${flake.opacity})`;
+        snowCtx.fillStyle = isDark
+            ? `rgba(255, 255, 255, ${flake.opacity})`
+            : `rgba(255, 107, 0, ${flake.opacity})`;
         if (flake.blur > 0) {
             snowCtx.shadowBlur = flake.blur;
-            snowCtx.shadowColor = 'rgba(255, 255, 255, 0.35)';
+            snowCtx.shadowColor = isDark ? 'rgba(255, 255, 255, 0.35)' : 'rgba(255, 107, 0, 0.35)';
         } else {
             snowCtx.shadowBlur = 0;
         }
