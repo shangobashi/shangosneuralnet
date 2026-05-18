@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>FieldTheoryX Is Live — Shango's Neural Net</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FF6B00",
+                        "background-light": "#FAFAFA",
+                        "background-dark": "#0a0a0a",
+                        "muted-light": "#6B7280",
+                        "muted-dark": "#A3A3A3",
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+                    typography: (theme) => ({
+                        DEFAULT: { css: { color: theme('colors.text-light'), a: { color: theme('colors.primary') } } },
+                        invert: { css: { color: '#F8FAFC', a: { color: theme('colors.primary') }, h2: { color: '#F8FAFC' }, p: { color: '#F8FAFC' }, li: { color: '#F8FAFC' } } }
+                    }),
+                },
+            },
+        };
+    </script>
+    <style>html.dark body { background-color: #0a0a0a }</style>
+</head>
+<body class="relative bg-background-light dark:bg-background-dark text-gray-900 dark:text-gray-100 font-mono antialiased min-h-screen flex flex-col">
+
+<div id="reading-progress" class="fixed left-0 w-full h-[3px] bg-gray-200 dark:bg-gray-800 z-[60]">
+    <div id="progress-bar" class="h-full bg-primary transition-all duration-150" style="width: 0%;"></div>
+</div>
+
+
+<header class="w-full border-b border-gray-200 dark:border-gray-800 py-4 sm:py-6 sticky top-0 bg-white/95 dark:bg-[#0a0a0a]/95 backdrop-blur-sm z-50">
+    <div class="max-w-4xl mx-auto px-6 flex items-center justify-between">
+        <a class="text-xl font-bold tracking-tight text-primary" href="../index.html">Shango's Neural Net</a>
+        <nav class="flex gap-6 text-sm font-medium">
+            <a class="hover:text-primary transition-colors" href="../index.html">Posts</a>
+            <a class="hover:text-primary transition-colors" href="../about.html">About</a>
+            <a class="hover:text-primary transition-colors" href="https://dev.shangobashi.com" target="_blank">Portfolio</a>
+        </nav>
+    </div>
+</header>
+
+<main class="relative z-10 flex-grow w-full max-w-4xl mx-auto px-6 py-12">
+    <article class="prose dark:prose-invert prose-lg max-w-none font-mono">
+        <header class="mb-12">
+            <p style="text-align:center;"><img src="../assets/images/fieldtheoryx-logo.png" alt="FieldTheoryX logo" style="max-width:180px;margin:0 auto 2rem;display:block;" /></p>
+            <h1 class="text-3xl md:text-4xl text-primary font-bold mb-4">FieldTheoryX Is Live</h1>
+            <p class="text-sm text-muted-light dark:text-muted-dark">25 Apr, 2026 &middot; 18 min read</p>
+        </header>
+        <div class="space-y-6 leading-relaxed">
+
+<p>There are some pieces of software you discover and immediately recognize as correct.</p>
+<p>Not correct in the inflated startup sense where every founder on earth is apparently &ldquo;reinventing&rdquo; something while standing in front of a gradient.</p>
+<p>Correct in the simpler sense.</p>
+<p>A real problem.</p>
+<p>A real shape.</p>
+<p>A solution that snaps into place so cleanly that the only question left is: why was it not already available when you needed it?</p>
+<p>That was Field Theory for me.</p>
+<p>Andrew Farah built the original project.</p>
+<p>The idea is clean: take your X/Twitter bookmarks, keep them local, index them properly, and make them retrievable again.</p>
+<p>Not performatively organized.</p>
+<p>Not &ldquo;AI-powered&rdquo; in the empty sense.</p>
+<p>Not sprayed across some cloud dashboard that wants to become the center of your life.</p>
+<p>Just local-first retrieval for something that should never have been trapped in a scroll to begin with.</p>
+<p>There was one immediate problem, at the time: it only worked on Mac.</p>
+<p>And my Macs are all Intel-era, pre-2012. Nice to keep a bitcoin chart open. Which they barely manage on 4GB RAM...</p>
+<p>So I built my own fork.</p>
+<p>~</p>
+<p>If you use X seriously, you know what bookmarks become after a while.</p>
+<p>Not a library.</p>
+<p>Not a system.</p>
+<p>Not even really a collection.</p>
+<p>A sediment layer.</p>
+<p>Saved threads. Saved papers. Saved tools. Saved ideas.</p>
+<p>Saved things you absolutely meant to return to.</p>
+<p>And then time passes.</p>
+<p>Forgotten threads. Forgotten papers. Forgotten tools. Forgotten ideas.</p>
+<p>The interface does what platforms like X always do when they half-build an important feature: it gives you just enough surface area to create value and nowhere near enough structure to recover it...</p>
+<p>So bookmarks accumulate.</p>
+<p>And once they accumulate without retrieval, they stop being an asset and start becoming a guilt pile.</p>
+<p><em>That</em> is the part I hate.</p>
+<p>Not because the information disappears. But because it is <em>still</em> there. Close enough to matter. Buried enough to be useless. A uniquely irritating failure mode...</p>
+<p>You did the curation. You did the attention work. You selected the signal.</p>
+<p>And then the product throws it all back at you as one long undifferentiated scroll.</p>
+<p>That is not a knowledge system.</p>
+<p>That is storage without recall.</p>
+<p>And storage without recall is just a prettier form of loss.</p>
+<p>~</p>
+<p>Field Theory solves that by treating bookmarks like they deserve to be treated.</p>
+<p>=&gt; As material.</p>
+<p>FieldTheoryX takes that same core idea and makes it feel natural in my own Windows + agents workflow.</p>
+<p>&rarr; Then it stores them in SQLite.</p>
+<p>&rarr; Then it indexes them with full-text search.</p>
+<p>&rarr; Then it gives you a CLI workflow that makes them usable again.</p>
+<p>That means:</p>
+<ul>
+    <li>local sync</li>
+    <li>local storage</li>
+    <li>local search</li>
+    <li>local control</li>
+    <li>terminal-first retrieval</li>
+    <li>scriptable archive workflows</li>
+</ul>
+<p>No hosted layer. No subscription logic. No remote index pretending to be a product moat.</p>
+<p>Just your archive, on your machine, in a form you can actually work with.</p>
+<p>That matters to me more than the average software pitch probably allows.</p>
+<p>Because I think a lot of modern tools are built backwards.</p>
+<p>They start by asking how much control they can centralize. Then they wrap the dependency in convenience and call it innovation. And I have less and less patience for that :).</p>
+<p>Local-first systems feel better not because they are ideologically pure, but because they respect the user&rsquo;s leverage.</p>
+<p>They let the artifact belong to the person doing the work.</p>
+<p>That is what I want more of...</p>
+<p>~</p>
+<p>It is also important to say clearly what this is and what it is not.</p>
+<p>This is not a generic browser-bookmark importer.</p>
+<p>It is a Windows-first fork of Andrew Farah&rsquo;s Field Theory CLI, focused on X/Twitter bookmarks, local search, and agent-friendly retrieval.</p>
+<p>That distinction matters.</p>
+<p>The Chrome and Brave support here is about session/auth support on Windows. It is the path that lets the tool sync your X bookmarks locally and keep the whole workflow clean.</p>
+<p>That is different from pretending the product is some universal bookmark manager for every surface on Earth.</p>
+<p>I do not want to oversell it. I want to describe it correctly.</p>
+<p>Because good software does not need exaggeration. It needs precision.</p>
+<p>And the precise pitch here is already strong enough:</p>
+<p>If you have years of saved X bookmarks and you want them to become searchable, local, and actually usable in a Windows-first workflow, this tool is for you.</p>
+<p>~</p>
+<p>There is also one thing I should say openly.</p>
+<p>FieldTheoryX was built with heavy help from Diop, my agentic engineering system.</p>
+<p>I am still early as a software engineer. Very early, honestly.</p>
+<p>But I am not early at caring about systems, workflows, tools, research, and the shape of useful software. I have spent enough years living inside complex personal systems to know when a tool removes drag and when it only adds theater.</p>
+<p>Diop helped me move faster. But it did not decide what mattered.</p>
+<p>I chose the product direction. I tested the workflows. I handled the release judgment. I ran audits. I rejected bad launch copy. I forced the classification feature to be marked experimental instead of pretending everything was magically stable. I fixed the naming, package, landing page, domain, and deployment mess until the thing was coherent.</p>
+<p>That is probably the honest version of modern building for me right now.</p>
+<p>Not &ldquo;AI did it.&rdquo; Not &ldquo;I hand-coded every line in a cave.&rdquo;</p>
+<p>Something more interesting and more real.</p>
+<p>A human with taste, intent, stubbornness, and a growing engineering base, working with agents that can actually extend the surface area of what is possible.</p>
+
+<p><em>This</em> feels like the future I want to keep exploring. Don&#39;t you?</p>
+
+<p style="text-align:center;"><img src="../assets/images/fieldtheoryx-diop-brain.jpg" alt="Diop Brain with 28K nodes" style="max-width:600px;width:100%;margin:1.5rem auto 0.5rem;display:block;border-radius:8px;" /></p>
+<p style="text-align:center;font-size:0.8rem;color:#A3A3A3;margin-top:0.25rem;">Diop&#39;s Brain + ~17K Bookmarks ingested into it with FieldTheoryX == 28K nodes in total</p>
+
+<p>~</p>
+<p>There is a deeper reason I liked doing this fork.</p>
+<p>It fits the kind of products I increasingly care about building.</p>
+<p>Not giant abstract &ldquo;platform visions.&rdquo; Not software that needs a paragraph of theater before the utility becomes visible.</p>
+<p>Sharp tools. Tight wedges. Useful objects.</p>
+<p>The kind of software where you can explain the pain in one sentence and the relief in one sentence.</p>
+<p>Your bookmarks are trapped in a scroll. Now they are searchable locally. That is a real before and after.</p>
+<p>And the best thing about software like that is that it creates immediate honesty. Either it removes drag or it does not. Either it turns clutter into leverage or it does not. Either it respects the user&#39;s material or it does not.</p>
+<p>I prefer problems like that. They are much cleaner than speculative nonsense.</p>
+<p>~</p>
+<p>So what exactly do you get in FieldTheoryX?</p>
+<p>You get a local-first X/Twitter bookmark archive that can:</p>
+<ul>
+    <li>sync your saved bookmarks from X/Twitter</li>
+    <li>store them locally in SQLite</li>
+    <li>search them through full-text indexing</li>
+    <li>list and inspect them from the CLI</li>
+    <li>use a separate ftx command</li>
+    <li>keep the workflow grounded on your machine instead of disappearing into a cloud dependency</li>
+</ul>
+<p>There is also optional LLM classification and exploration. But I am marking that part experimental for now.</p>
+<p>Core sync, search, and indexing are the stable release. Classification is structurally hardened, schema-validated, and tested, but I still want final live Codex/Claude validation before calling it stable.</p>
+<p>That distinction matters too. I would rather ship a useful tool with one feature clearly marked experimental than pretend the whole surface is equally mature.</p>
+<p>That is part of the release discipline I want to build into everything I ship from here.</p>
+<p>~</p>
+<p>The practical layer is local search. The more important layer is what it restores: Retrievability.</p>
+<p>That is the whole game more often than people admit. We talk a lot about information capture. Much less about recovery. But the value of anything you save is downstream of whether you can get it back at the right moment. A reference you cannot recover is not much better than a reference you never kept...</p>
+<p>What FieldTheoryX restores is the ability to re-enter your own archive with intent. Not passively browse it. Not hope to stumble into it. Actually query it. Actually use it.</p>
+<p>That changes the feeling of the archive. It stops feeling like digital clutter. It starts feeling like infrastructure.</p>
+<p>~</p>
+<p>And I like that word here: infrastructure. Because that is what the best small tools really are.</p>
+<p>They are not always loud. They do not always arrive with a giant launch narrative. They do not need to cosplay as world-changing in order to matter.</p>
+<p>They become part of the builder&#39;s environment. Quietly. Reliably. Repeatably.</p>
+<p>The right command. The right lookup. The right result at the right time.</p>
+<p>That is enough to make a tool valuable. Sometimes that is more than enough.</p>
+<p>I think FieldTheoryX fits that category. It is not trying to become your social network. It is not trying to own your attention. It is trying to make something you already curated retrievable again.</p>
+<p>~</p>
+<p>So yes, this is also a launch post. But it is not only that.</p>
+<p>It is also me planting a small flag for the kind of software work I want more of: more local-first tools, more practical systems, more sharp products with immediate utility, more work that respects the user&#39;s control, more software that removes drag instead of adding another layer of dependency and calling it progress.</p>
+<p>It is also me shipping something for the first time, and that is no small step. In my opinion :p. I said an MVP a day but clearly, I was shooting for the moon. I am glad to finally be landing on a star.</p>
+<p>There will be more.</p>
+<p>=&gt; Next up is Diop&#39;s brain. I will be open-sourcing the entire architecture/system. Simple way to supercharge your Hermes agent memory.</p>
+<p>I&#39;d better release it quickly though, because NousResearch works at such speed, they might have implemented my idea by then. Which would be kinda nice -- ngl.</p>
+<p>=&gt; Then is FollowGraph. I thought it would be released by now: although the website is live and you can find it if you look for it, I still haven&#39;t properly shipped it. Cause I am not done yet (obviously). Realized it was way too slow for an X power user (such as myself). It would take 48 hours to scrape through the 7500 accounts I was following then. I know people who follow 10 times that amount. And I know they won&#39;t wait 10 days for something that was supposed to be useful to finish showing its usefulness. So I kept testing and iterating. Brought it down to ~12 hours for 7,500 accounts. Reaching ~4 hours would seal the deal. It managed to find 500 completely dead accounts that I was still following, unfollowed them for me, and now I can finally follow all the interesting people I keep finding on X every day. In the meantime, if you find the project and decide to play with it, it&#39;s at your own risk. And do mind its slowness.</p>
+<p>Anyways.</p>
+<p>~</p>
+<p>Andrew Farah deserves credit for the original project and the original shape of the idea.</p>
+<p>FieldTheoryX is my Windows-first, security-hardened fork of that idea. Same philosophical root. Different product opinion.</p>
+<p>It is free. It is open source. Use with caution.</p>
+<p>And if your X bookmarks have turned into a graveyard of good intentions, you can finally do something useful with them.</p>
+<p>GitHub:</p>
+<p><a href="https://github.com/shangobashi/fieldtheoryx-cli-windowsport">https://github.com/shangobashi/fieldtheoryx-cli-windowsport</a></p>
+<p>Install:</p>
+<p><code>npm install -g fieldtheoryx-cli-windowsport</code></p>
+<p>Then:</p>
+<p><code>ftx doctor</code><br/><code>ftx sync</code><br/><code>ftx search &quot;ai memory&quot;</code></p>
+<p>Landing page:</p>
+<p><a href="https://fieldtheoryx.issalabs.xyz">https://fieldtheoryx.issalabs.xyz</a></p>
+<p>Cheers.</p>
+<p>&mdash; Shango Bashi</p>
+<p>P.S. Bonus tip: best use-case, in my opinion, is Obsidian + FieldTheoryX == Memory System for your favorite Agent.</p>
+<p>I&#39;ll make a long-read on how I created Diop&#39;s Memory Architecture in a few days (I need some rest). I&#39;m pretty proud of that one.</p>
+<p>Picture below shows 28K nodes inside my Obsidian graph, of which ~17K are my X bookmarks if I recall properly (I hardly use my own memory anymore :p).</p>
+<p>Super useful bonus tip: don&#39;t even bother using FieldTheoryX yourself.</p>
+<p>Feed your agent the landing page instead, and tell it:</p>
+<p>&ldquo;Use FieldTheoryX (<a href="https://fieldtheoryx.issalabs.xyz">https://fieldtheoryx.issalabs.xyz</a>) to <em>ingest</em> my X bookmarks into [(your_Memory_vault(I_Recommend_Obsidian))].&rdquo;</p>
+<p><a href="https://fieldtheoryx.issalabs.xyz">https://fieldtheoryx.issalabs.xyz</a></p>
+
+<p style="text-align:center;"><img src="../assets/images/fieldtheoryx-obsidian-graph.png" alt="Obsidian graph showing 28K nodes" style="max-width:700px;width:100%;margin:2rem auto 0;display:block;border-radius:8px;" /></p>
+
+        </div>
+        <footer class="mt-16 pt-8 border-t border-gray-200 dark:border-gray-700">
+            <a class="text-primary hover:underline flex items-center" href="../index.html">
+                Back to Feed
+            </a>
+        </footer>
+    </article>
+</main>
+
+<footer class="relative z-10 py-8 text-center text-xs text-muted-light dark:text-muted-dark font-mono border-t border-gray-200 dark:border-gray-800">
+    <p>&copy; 2026 Shango&#39;s Neural Net.</p>
+</footer>
+
+<script>
+    const htmlElement = document.documentElement;
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        htmlElement.classList.add('dark');
+    }
+</script>
+
+<script>
+    const headerElement = document.querySelector("header");
+    const readingProgress = document.getElementById("reading-progress");
+    const progressBar = document.getElementById("progress-bar");
+
+    function updateReadingProgress() {
+        if (!progressBar) { return; }
+        const windowHeight = window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight;
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollableHeight = documentHeight - windowHeight;
+        const progress = (scrollTop / scrollableHeight) * 100;
+        progressBar.style.width = Math.min(progress, 100) + "%";
+    }
+
+    function updateProgressOffset() {
+        if (!headerElement || !readingProgress) { return; }
+        readingProgress.style.top = headerElement.offsetHeight + "px";
+    }
+
+    window.addEventListener("scroll", updateReadingProgress);
+    window.addEventListener("load", updateProgressOffset);
+    window.addEventListener("resize", updateProgressOffset);
+</script>
+</body>
+</html>

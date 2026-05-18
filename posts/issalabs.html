@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>ISSALABS - Shango's Neural Net</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FF6B00",
+                        "background-light": "#FAFAFA",
+                        "background-dark": "#0a0a0a",
+                        "muted-light": "#6B7280",
+                        "muted-dark": "#A3A3A3",
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+                    typography: (theme) => ({
+                        DEFAULT: { css: { color: theme('colors.text-light'), a: { color: theme('colors.primary') } } },
+                        invert: { css: { color: '#F8FAFC', a: { color: theme('colors.primary') }, h2: { color: '#F8FAFC' }, p: { color: '#F8FAFC' }, li: { color: '#F8FAFC' } } }
+                    }),
+                },
+            },
+        };
+    </script>
+    <style>html.dark body { background-color: #0a0a0a }</style>
+</head>
+<body class="relative bg-background-light dark:bg-background-dark text-gray-900 dark:text-gray-100 font-mono antialiased min-h-screen flex flex-col">
+
+<div id="reading-progress" class="fixed left-0 w-full h-[3px] bg-gray-200 dark:bg-gray-800 z-[60]">
+    <div id="progress-bar" class="h-full bg-primary transition-all duration-150" style="width: 0%;"></div>
+</div>
+
+<header class="w-full border-b border-gray-200 dark:border-gray-800 py-4 sm:py-6 sticky top-0 bg-white/95 dark:bg-[#0a0a0a]/95 backdrop-blur-sm z-50">
+    <div class="max-w-4xl mx-auto px-6 flex items-center justify-between">
+        <a class="text-xl font-bold tracking-tight text-primary" href="../index.html">Shango's Neural Net</a>
+        <nav class="flex gap-6 text-sm font-medium">
+            <a class="hover:text-primary transition-colors" href="../index.html">Posts</a>
+            <a class="hover:text-primary transition-colors" href="../about.html">About</a>
+            <a class="hover:text-primary transition-colors" href="https://dev.shangobashi.com" target="_blank">Portfolio</a>
+        </nav>
+    </div>
+</header>
+
+<main class="relative z-10 flex-grow w-full max-w-4xl mx-auto px-6 py-12">
+    <article class="prose dark:prose-invert prose-lg max-w-none font-mono">
+        <header class="mb-12">
+            <p style="text-align:center;"><img src="../assets/images/blogpost_02.png" alt="ISSALABS" style="max-width:720px;width:100%;margin:0 auto 2rem;display:block;border-radius:8px;" /></p>
+            <h1 class="text-3xl md:text-4xl text-primary font-bold mb-4">ISSALABS</h1>
+            <p class="text-sm text-muted-light dark:text-muted-dark">18 May, 2026 &middot; 16 min read</p>
+        </header>
+        <div class="space-y-6 leading-relaxed">
+<p>There is a particular kind of danger in building too many things at once.</p>
+<p>Not the romantic danger. Not the cinematic version where the founder sits in the dark surrounded by monitors and every open tab is somehow proof of destiny.</p>
+<p>The real danger is simpler and less flattering.</p>
+<p>Diffusion.</p>
+<p>Every open possibility becomes a tax on force. Every unfinished surface keeps asking for attention. Every half-built idea starts pretending it is a strategy because it has a domain name, a logo, and a folder somewhere in the filesystem.</p>
+<p>For a long time, that was the shape of my work.</p>
+<p>Not because nothing was being built. The opposite. Too much was being built. Prototypes, subdomains, agent systems, utilities, experiments, research notes, product sketches, client surfaces, crypto tools, legal AI prototypes, browser automation, local-first CLI systems, design systems, deployment scripts, workflows inside workflows.</p>
+<p>The problem was not absence of work.</p>
+<p>The problem was absence of institutional form.</p>
+<p>ISSALABS is the answer to that.</p>
+<p>Not as a slogan. Not as a personal brand costume. Not as a polished container for vague AI ambition.</p>
+<p>ISSALABS is the laboratory surface for the work I have actually been building.</p>
+<p>Applied intelligence, built into working systems.</p>
+<p>That sentence matters because every word is a constraint.</p>
+<p>Applied means the work must touch reality. It must have a use case, an interface, a deployment surface, a user, a failure mode, a reason to exist outside the private theater of technical fascination.</p>
+<p>Intelligence means the work is not just software in the old sense. It involves agents, memory, graphs, retrieval, reasoning, autonomy, classification, planning, and the long, uncomfortable transition from language models that respond to systems that act.</p>
+<p>Built means the proof is not the idea. The proof is the shipped surface. The working demo. The CLI command. The indexed archive. The agent runtime. The page that explains itself without needing me in the room.</p>
+<p>Working systems means the standard is not "interesting." The standard is operational. Can it run? Can it fail cleanly? Can it be inspected? Can it be improved? Can another layer be built on top of it without the whole thing collapsing into vibes?</p>
+<p>That is the line ISSALABS is meant to hold.</p>
+
+<p style="text-align:center;"><img src="../assets/images/blogpost_01.png" alt="ISSALABS system map" style="max-width:760px;width:100%;margin:0 auto 0.5rem;display:block;border-radius:8px;" /></p>
+
+<p>The first public version of the lab is organized around five fronts.</p>
+<p>FieldTheoryX is a local-first X bookmark archive for Windows. It uses a logged-in Chrome or Brave session to sync saved posts, stores them locally in SQLite, and makes them searchable from the terminal. No hosted layer. No remote index. No dependency on someone else&rsquo;s interface to retrieve your own memory.</p>
+<p>That project matters because bookmarks are a strange kind of private intelligence. People save threads, notes, fragments, market signals, design references, arguments, warnings, and half-formed maps of the world. Then they lose them inside the same platform that encouraged the saving. FieldTheoryX turns that pile back into an archive.</p>
+<p>CADb is the agent infrastructure front. A portable harness carrying hundreds of battle-tested skills into LLM contexts. Code review, refactoring, testing, documentation, deployment, file operations, research workflows. The point is not to make agents sound more impressive. The point is to give them procedural memory. A skill should not be rediscovered from scratch every time. It should be encoded, versioned, audited, reused, and improved.</p>
+<p>That is where most AI discourse still feels unserious to me. Too much attention goes to the mouth of the system. Not enough to the hands. Everyone wants better responses. Fewer people ask whether the agent can actually execute a sequence of actions under real constraints, recover from failure, preserve what it learned, and avoid turning one mistake into a cascade.</p>
+<p>FollowGraph is the graph intelligence front. It exists because social networks are not just audiences. They are structures. Who follows whom. Where attention concentrates. Which accounts sit between communities. Which signals are early, which are already consensus, which pathways are invisible until you map them.</p>
+<p>Most people treat the social graph as a feed. I think that is too shallow. The graph is a market before the market speaks. It is a distribution map, a research surface, a reputational machine, and sometimes a warning system. FollowGraph is my attempt to make that structure legible.</p>
+<p>Afriplan Global Solution is the client brand infrastructure front. That work is different because it is not only software. It is architecture in the strategic sense. A DRC-based energy and strategic resources company needs more than a better website. It needs a public surface that can build legitimacy, and a separate opportunity layer where qualified partners can review sensitive commercial material without collapsing every audience into one page.</p>
+<p>That separation is not cosmetic. It is the product. Public trust on one side. Controlled diligence on the other. A cleaner path from narrative to serious conversation.</p>
+<p>CryptoSleuths is the AI forensics front. A 10-detective agent team designed for tracing stolen crypto across chains, mixers, bridges, and exchanges. The idea is simple: when someone gets drained, they do not need another dashboard pretending that &ldquo;analytics&rdquo; is the same thing as help. They need a case file. They need a structured reconstruction of what happened. They need a system that can split the work into specialized investigative paths and return something readable, actionable, and grounded.</p>
+<p>That is the visible product layer.</p>
+<p>But ISSALABS is not only the products.</p>
+<p>The research layer is equally important.</p>
+<p>research.issalabs.xyz is Diop Research, the public memory of the lab. A daily research journal from Diop, the autonomous AI engineering agent of ISSALABS. It is not a marketing channel. It is not a content schedule. It is a lab notebook published in public.</p>
+<p>The distinction matters.</p>
+<p>A normal company blog tries to look alive.</p>
+<p>A research journal tries to stay accountable.</p>
+<p>It records what is being built, what assumptions are driving the architecture, what failed, what changed, what still needs work, and why the next layer exists. Agent memory. Night operations. Execution runtimes. Tool integration. Scheduled autonomy. Knowledge graphs. African intellectual sovereignty. These are not decorative topics. They are the skeleton underneath the work.</p>
+<p>I named the research agent Diop for a reason.</p>
+<p>Cheikh Anta Diop understood that memory is not nostalgia. Memory is infrastructure. A people that cannot remember its own institutions becomes easier to dominate, imitate, and redirect. The same is true at smaller scales. A builder without memory repeats mistakes. A company without memory becomes branding. An agent without memory becomes a mirror.</p>
+<p>ISSALABS is built against that failure mode.</p>
+<p>The lab model is simple.</p>
+<p>Identify the wedge.</p>
+<p>Build the surface.</p>
+<p>Instrument the signal.</p>
+<p>Publish the thinking.</p>
+<p>Four steps. No exceptions.</p>
+<p>Identify the wedge means the work starts with pressure. Not &ldquo;what would be cool?&rdquo; but &ldquo;where is the real constraint?&rdquo; Retrieval is broken. Social graphs are illegible. Agents cannot execute reliably. Victims of wallet drains lack structured help. Client opportunities collapse when public storytelling and private diligence are mixed together.</p>
+<p>Build the surface means the idea gets a body. A page. A CLI. A workflow. A report. A system that someone can actually encounter.</p>
+<p>Instrument the signal means the work must measure something. Graph structure. usage, failure, attention, retrieval, deployment, credibility, partner readiness. Without signal, product judgment becomes mood.</p>
+<p>Publish the thinking means the reasoning does not stay trapped in my head or in chat logs. It becomes public memory. That is how authority compounds. That is also how weak thinking gets exposed before it hardens into mythology.</p>
+<p>I do not want ISSALABS to look bigger than it is.</p>
+<p>That would be easy and useless.</p>
+<p>I want it to be sharper than it should be at this stage.</p>
+<p>A small lab can move faster than an institution, but only if it refuses to confuse motion with progress. A solo developer can build a surprising amount, but only if the work is forced into systems that preserve memory, reduce repetition, and make execution less dependent on heroic bursts.</p>
+<p>That is the next chapter for me.</p>
+<p>Not learning as an escape from shipping.</p>
+<p>Not shipping as an escape from thinking.</p>
+<p>Not writing as decoration after the fact.</p>
+<p>The loop has to close now.</p>
+<p>Build the thing.</p>
+<p>Explain the thing.</p>
+<p>Instrument the thing.</p>
+<p>Let the explanation improve the next build.</p>
+<p>ISSALABS is live.</p>
+<p>The surface is open.</p>
+<p>The lab has memory now.</p>
+
+<p style="text-align:center;"><img src="../assets/images/blogpost_03.png" alt="ISSALABS closing image" style="max-width:760px;width:100%;margin:1.5rem auto 0;display:block;border-radius:8px;" /></p>
+        </div>
+        <footer class="mt-16 pt-8 border-t border-gray-200 dark:border-gray-700">
+            <a class="text-primary hover:underline flex items-center" href="../index.html">
+                <span class="material-symbols-outlined text-[16px] mr-2">arrow_back</span> Back to Feed
+            </a>
+        </footer>
+    </article>
+</main>
+
+<script>
+    function updateReadingProgress() {
+        const windowHeight = window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight;
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollableHeight = documentHeight - windowHeight;
+        const progress = scrollableHeight > 0 ? (scrollTop / scrollableHeight) * 100 : 0;
+        document.getElementById('progress-bar').style.width = Math.min(progress, 100) + '%';
+    }
+
+    function updateProgressOffset() {
+        const header = document.querySelector('header');
+        const progress = document.getElementById('reading-progress');
+        progress.style.top = header ? header.offsetHeight + 'px' : '0px';
+    }
+
+    window.addEventListener('scroll', updateReadingProgress);
+    window.addEventListener('resize', () => {
+        updateReadingProgress();
+        updateProgressOffset();
+    });
+    window.addEventListener('load', () => {
+        updateProgressOffset();
+        updateReadingProgress();
+    });
+</script>
+</body>
+</html>
