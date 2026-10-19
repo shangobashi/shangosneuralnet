@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Idempotency Does Not Keep Agent Memory Correct | Shango's Neural Net</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FF6B00",
+                        "background-light": "#FAFAFA",
+                        "background-dark": "#0a0a0a",
+                        "muted-light": "#6B7280",
+                        "muted-dark": "#A3A3A3",
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+                    typography: (theme) => ({
+                        DEFAULT: { css: { color: theme('colors.text-light'), a: { color: theme('colors.primary') } } },
+                        invert: { css: { color: '#F8FAFC', a: { color: theme('colors.primary') }, h2: { color: '#F8FAFC' }, p: { color: '#F8FAFC' }, li: { color: '#F8FAFC' } } }
+                    }),
+                },
+            },
+        };
+    </script>
+    <style>html.dark body { background-color: #0a0a0a }</style>
+    <meta name="description" content="Why persistent agent memory needs historical revalidation, synchronized search indexes, and tests for information that must stop being retrieved."/>
+    <meta name="author" content="Shango Bashi"/>
+    <link rel="canonical" href="https://blog.shangobashi.com/posts/agent-memory-revalidation.html"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:title" content="Idempotency Does Not Keep Agent Memory Correct"/>
+    <meta property="og:description" content="Why persistent agent memory needs historical revalidation, synchronized search indexes, and tests for information that must stop being retrieved."/>
+    <meta property="og:url" content="https://blog.shangobashi.com/posts/agent-memory-revalidation.html"/>
+    <meta property="article:published_time" content="2026-10-19"/>
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="Idempotency Does Not Keep Agent Memory Correct"/>
+    <meta name="twitter:description" content="Why persistent agent memory needs historical revalidation, synchronized search indexes, and tests for information that must stop being retrieved."/>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Idempotency Does Not Keep Agent Memory Correct", "datePublished": "2026-10-19", "dateModified": "2026-10-19", "author": {"@type": "Person", "name": "Shango Bashi"}, "mainEntityOfPage": "https://blog.shangobashi.com/posts/agent-memory-revalidation.html", "description": "Why persistent agent memory needs historical revalidation, synchronized search indexes, and tests for information that must stop being retrieved."}</script>
+    <style>
+      article pre { overflow-x:auto; white-space:pre; border:1px solid #343434; border-radius:8px; padding:1.25rem; font-size:0.82rem; line-height:1.65; background:#151515; color:#ededed; }
+      article pre code { background:transparent; padding:0; color:inherit; font-weight:400; }
+      article .source-note { margin-top:3rem; padding-top:1.5rem; border-top:1px solid #343434; font-size:0.85rem; }
+      article h2 { scroll-margin-top:7rem; }
+      @media(max-width:640px) { body > header > div { flex-wrap:wrap; gap:1rem; } article pre { padding:1rem; } }
+    </style>
+</head>
+<body class="relative bg-background-light dark:bg-background-dark text-gray-900 dark:text-gray-100 font-mono antialiased min-h-screen flex flex-col">
+
+<div id="reading-progress" class="fixed left-0 w-full h-[3px] bg-gray-200 dark:bg-gray-800 z-[60]">
+    <div id="progress-bar" class="h-full bg-primary transition-all duration-150" style="width: 0%;"></div>
+</div>
+
+
+<header class="w-full border-b border-gray-200 dark:border-gray-800 py-4 sm:py-6 sticky top-0 bg-white/95 dark:bg-[#0a0a0a]/95 backdrop-blur-sm z-50">
+    <div class="max-w-4xl mx-auto px-6 flex items-center justify-between">
+        <a class="text-xl font-bold tracking-tight text-primary" href="../index.html">Shango's Neural Net</a>
+        <nav class="flex gap-6 text-sm font-medium">
+            <a class="hover:text-primary transition-colors" href="../index.html">Posts</a>
+            <a class="hover:text-primary transition-colors" href="../about.html">About</a>
+            <a class="hover:text-primary transition-colors" href="https://dev.shangobashi.com" target="_blank">Portfolio</a>
+        </nav>
+    </div>
+</header>
+
+<main class="relative z-10 flex-grow w-full max-w-4xl mx-auto px-6 py-12">
+<article class="prose dark:prose-invert prose-lg max-w-none font-mono">
+<header class="mb-12">
+<h1 class="text-3xl md:text-4xl text-primary font-bold mb-4">Idempotency Does Not Keep Agent Memory Correct</h1>
+<p class="text-sm text-muted-light dark:text-muted-dark">Shango Bashi &middot; <time datetime="2026-10-19">19 Oct, 2026</time> &middot; 9 min read</p>
+</header>
+<div class="space-y-6 leading-relaxed"><p>An agent can remember the wrong thing perfectly. It can preserve the source, avoid duplicate writes, survive a restart, and retrieve the same bad record every morning. All the machinery works. The record should no longer be there.</p>
+<p>This is one of the less glamorous problems in building persistent agent memory. A conversation produces candidate knowledge. Some candidates become useful context. Others are temporary observations, weak inferences, or statements whose meaning depends on circumstances that have already changed. Once those candidates are stored, improving the extraction rules only solves half the problem.</p>
+<p>Recent work on CADb at IssaLabs has included revalidating stored derivations, filtering transient material, and keeping retrieval artifacts synchronized after derivation. The implementation snapshot supports those changes. It does not establish that every memory is correct, or that the live system has universal reliability. What interests me here is the general contract underneath that work: a successful earlier write cannot be permanent permission to participate in future reasoning.</p>
+
+<h2>Two different promises</h2>
+<p>Idempotency makes repeated execution safe under a defined contract. Given the same request, retrying should not create another unintended effect. That is valuable when a process crashes after writing a result but before reporting success. The <a href="https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/">Amazon Builders’ Library discussion of idempotent APIs</a> explains this operational problem well.</p>
+<p>Memory maintenance introduces another variable: the rules can change. A candidate accepted under yesterday’s validator may fail today’s. Deduplicating by source identifier does not answer whether the stored interpretation remains admissible.</p>
+<p>Consider a synthetic example. A session contains “prefer explicit timezone settings” and “the queue contains seven tasks.” An early extractor stores both. Later, the policy distinguishes standing preferences from momentary observations. The new extractor rejects the queue statement, but a cache says that this session has already been processed. Nothing new is written. Nothing old is removed.</p>
+<p>The rerun is stable, cheap, and wrong under the new policy. A record’s processing history and its current eligibility are separate facts. I want a maintenance contract that checks both.</p>
+
+<h2>Revalidate the stored interpretation</h2>
+<p>The useful boundary is between retained evidence and active context. A source can remain available for audit without every interpretation of it remaining eligible for retrieval. Removing a derived candidate from active memory need not erase the underlying conversation.</p>
+<p>For a fixed candidate corpus <code>C</code> and validation policy <code>p</code>, define the active projection as <code>A = validate(C, p)</code>. Repeating that projection should be stable. Changing <code>p</code> should cause the affected candidates to be reconsidered, including candidates written before the change.</p>
+<p>This is narrower than regenerating all knowledge with a model. Existing candidates can first pass through deterministic validation. Re-derivation becomes a separate decision for records that need reinterpretation. That separation matters when model calls are slow, expensive, nondeterministic, or dependent on unavailable source material.</p>
+<p>The following is an illustrative Python example, written for this article. It uses synthetic data and a deliberately simple rule. It is not a CADb source excerpt, and its generation manifest is an example design rather than a claim about CADb’s runtime.</p>
+<pre><code class="language-python">def snapshot(rows, policy):
+    # Complete candidate snapshot; unique IDs and trusted kind labels assumed.
+    ordered = sorted(rows, key=lambda row: row['id'])
+    accepted = [row for row in ordered
+                if policy == 'v1' or row['kind'] == 'rule']
+    payload = {'policy': policy, 'rows': ordered}
+    generation = hashlib.sha256(json.dumps(
+        payload, sort_keys=True, separators=(',', ':')
+    ).encode()).hexdigest()
+    return accepted, generation</code></pre>
+<p>Under <code>v1</code>, both example records survive. Under <code>v2</code>, only the standing rule survives. Sorting by stable identity makes input order irrelevant. Hashing the policy and full candidate snapshot distinguishes a policy migration from an ordinary retry. It also detects content changes that leave the document count unchanged.</p>
+<p>The labels here are trusted inputs. A real classifier can label a temporary observation as a rule, and this function will accept the mistake. The hash certifies identity of the serialized inputs; it certifies neither truth nor good classification. Changes to validation semantics must also change the policy identifier. Otherwise the manifest tells a misleading story.</p>
+
+<h2>Removing a row is not enough</h2>
+<p>A retrieval system usually has more than one representation of the same material. There may be a candidate file, a database row, a full-text index, and a vector index. Updating one does not automatically establish consistency across the others.</p>
+<p>SQLite makes this particularly easy to demonstrate. With an external-content FTS5 table, the application is responsible for keeping the search index consistent with the content table. The <a href="https://www.sqlite.org/fts5.html#external_content_table_pitfalls">FTS5 documentation</a> describes the resulting pitfalls and the rebuild operation. A normal table read and a search query can expose different state when maintenance is incomplete.</p>
+<p>For a small corpus, one understandable approach is to rebuild the active projection and its index together. The companion example initializes a content table, an external-content FTS5 table, and a generation manifest. Publication then happens inside one SQLite transaction:</p>
+<pre><code class="language-python">def install(db, rows, policy, fail=False):
+    accepted, generation = snapshot(rows, policy)
+    # Schema is initialized separately, outside the publication transaction.
+    with db:
+        db.execute('DELETE FROM active')
+        db.executemany('INSERT INTO active VALUES (?, ?)',
+                       [(row['id'], row['text']) for row in accepted])
+        if fail:
+            raise RuntimeError('simulated interruption')
+        db.execute("INSERT INTO search(search) VALUES ('rebuild')")
+        db.execute('DELETE FROM manifest')
+        db.execute('INSERT INTO manifest VALUES (?)', (generation,))
+    return generation</code></pre>
+<p>The transaction matters because readers should not observe a new content projection paired with the previous index. The injected exception exercises the rollback path: the previous content and generation remain in place. This example uses Python’s default SQLite connection behavior and an in-memory database; it does not demonstrate crash durability under every filesystem or connection configuration.</p>
+<p>If the search index lives in a separate service, a SQLite transaction cannot cover it. A stronger design builds a new index generation, validates it, then switches the serving reference. Old generations remain available until the switch succeeds. That design has its own coordination and cleanup costs. The invariant remains useful: serving should identify which source and policy generation produced the searchable state.</p>
+
+<h2>Test what must disappear</h2>
+<p>Retrieval evaluations naturally concentrate on finding the right answer. Memory maintenance also needs tests for answers that should have stopped being available. A positive query can keep passing while obsolete material remains searchable beside it.</p>
+<p>I ran the <a href="../assets/examples/memory-revalidation.py">standalone companion example</a> with six tests. They cover a stable retry, policy-driven removal of an old search hit, interruption before index rebuild, changed content with an unchanged row count, an empty active projection, and input-order independence. All six passed in this execution environment. Run it with <code>python memory-revalidation.py</code>; it requires Python 3.8 or later and SQLite with FTS5 enabled.</p>
+<p>The policy-change test first proves that “queue” retrieves the synthetic observation. It installs the stricter policy, then checks that “queue” returns nothing while “timezone” still retrieves the retained rule. This is a more useful assertion than checking that a filter function returned one fewer item. It crosses the boundary that the agent actually consumes.</p>
+<p>These results establish behavior for the example and those cases. They do not measure CADb retrieval quality, semantic accuracy, latency, concurrent writers, or performance on a large corpus. Keeping that scope explicit is part of making the result useful.</p>
+
+<h2>The cost of reconsideration</h2>
+<p>Full revalidation is simple to reason about but costs work proportional to the candidate corpus, before rebuilding search structures. At larger scale, policy versions and dependency tracking can narrow the affected set. The optimization is only safe when that dependency information is complete. An untracked rule change can leave exactly the stale candidates the migration was meant to remove.</p>
+<p>I would start with a complete, inspectable rebuild when the corpus permits it. Incremental invalidation is justified by a measured bottleneck, not by discomfort with doing obvious work twice. Re-derivation should have explicit budgets and retry rules so that an empty result does not become an endless stream of model calls.</p>
+<p>Rejection records introduce another trade-off. They help explain why a candidate disappeared, but can duplicate sensitive source text. An audit entry can often retain an identifier, policy version, and reason code instead. Audit data also needs access and retention rules; calling something a log does not make it harmless.</p>
+<p>And a validation change can itself be wrong. Keep enough provenance to inspect the decision and, where appropriate, restore a previous generation. Removing information from active retrieval should be deliberate and reversible where the underlying retention policy allows it.</p>
+
+<h2>Memory needs a revision contract</h2>
+<p>The useful question is what happens when the system changes its mind about what deserves to persist. Can it reconsider old interpretations without duplicating them? Can it remove a candidate from every serving surface? Can it demonstrate that removal through the retrieval interface?</p>
+<p>Those are ordinary data engineering questions with unusual consequences. An agent may use a retrieved record to plan its next action, so stale admissibility can propagate into behavior. Better extraction helps. Better ranking helps. Neither replaces the ability to revise the corpus already being served.</p>
+<p>I want persistent memory that can explain its current state and change that state coherently. Remembering more becomes useful once the system can also establish what it has stopped treating as knowledge.</p>
+
+<aside class="source-note" aria-label="Source notes">
+<h2>Sources and scope</h2>
+<p>The project context comes from an inspected implementation snapshot; private source code and operational details are excluded. The linked Python is a synthetic, reproducible demonstration. External references: Amazon Builders’ Library, <em>Making retries safe with idempotent APIs</em> (credibility: 9/10, primary engineering account); SQLite, <em>FTS5 documentation</em> (credibility: 10/10 for its documented API contract). Neither reference validates CADb’s implementation.</p>
+</aside>
+</div>
+<footer class="mt-16 pt-8 border-t border-gray-200 dark:border-gray-700">
+            <a class="text-primary hover:underline flex items-center" href="../index.html">
+                Back to Feed
+            </a>
+        </footer>
+    </article>
+</main>
+
+<footer class="relative z-10 py-8 text-center text-xs text-muted-light dark:text-muted-dark font-mono border-t border-gray-200 dark:border-gray-800">
+    <p>&copy; 2026 Shango&#39;s Neural Net.</p>
+</footer>
+
+<script>
+    const htmlElement = document.documentElement;
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        htmlElement.classList.add('dark');
+    }
+</script>
+
+<script>
+    const headerElement = document.querySelector("header");
+    const readingProgress = document.getElementById("reading-progress");
+    const progressBar = document.getElementById("progress-bar");
+
+    function updateReadingProgress() {
+        if (!progressBar) { return; }
+        const windowHeight = window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight;
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollableHeight = documentHeight - windowHeight;
+        const progress = (scrollTop / scrollableHeight) * 100;
+        progressBar.style.width = Math.min(progress, 100) + "%";
+    }
+
+    function updateProgressOffset() {
+        if (!headerElement || !readingProgress) { return; }
+        readingProgress.style.top = headerElement.offsetHeight + "px";
+    }
+
+    window.addEventListener("scroll", updateReadingProgress);
+    window.addEventListener("load", updateProgressOffset);
+    window.addEventListener("resize", updateProgressOffset);
+</script>
+</body>
+</html>
